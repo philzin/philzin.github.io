@@ -106,7 +106,7 @@ const SERVER_COST_FUNCTIONS = {
     "gmsPre30": saviorCost,
     "tms": tmsRegCost,
     "tmsr": tmsRebootCost,
-    'kms': kmsCost
+    'kms': kmsCost,
     "star": kmsCost
 }
 
