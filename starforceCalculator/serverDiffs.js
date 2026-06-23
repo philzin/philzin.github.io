@@ -278,7 +278,7 @@ const SERVER_RATES = {
     "gmsPre30": saviorRates,
     "tms": TMSRates,
     "tmsr": TMSRates,
-    "kms": kmsRates
+    "kms": kmsRates,
     "star": starRates
 }
 
