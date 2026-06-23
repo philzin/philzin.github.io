@@ -107,6 +107,7 @@ const SERVER_COST_FUNCTIONS = {
     "tms": tmsRegCost,
     "tmsr": tmsRebootCost,
     'kms': kmsCost
+    "star": kmsCost
 }
 
 function getBaseCost(server, current_star, item_level) {
@@ -236,6 +237,39 @@ const tyrantRates = {
    14: [0.01, 0, 0.495, 0.495],
 }
 
+const starRates = {
+    0: [0.95, 0.05, 0, 0],
+    1: [0.9, 0.1, 0, 0],
+    2: [0.85, 0.15, 0, 0],
+    3: [0.85, 0.15, 0, 0],
+    4: [0.80, 0.2, 0, 0],
+    5: [0.75, 0.25, 0, 0],
+    6: [0.7, 0.3, 0, 0],
+    7: [0.65, 0.35, 0, 0],
+    8: [0.6, 0.4, 0, 0],
+    9: [0.55, 0.45, 0, 0],
+    10: [0.5, 0.5, 0, 0],
+    11: [0.45, 0.55, 0.0, 0.0],
+    12: [0.4, 0.6, 0.0, 0.0],
+    13: [0.35, 0.65, 0.0, 0.0],
+    14: [0.3, 0.7, 0.0, 0.0],
+    15: [0.3, 0.679, 0, 0.021],
+    16: [0.3, 0.679, 0, 0.021],
+    17: [0.15, 0.782, 0, 0.068],
+    18: [0.15, 0.782, 0, 0.068],
+    19: [0.15, 0.765, 0, 0.085],
+    20: [0.3, 0.595, 0, 0.105],
+    21: [0.28, 0.6098, 0, 0.1102],
+    22: [0.26, 0.6253, 0, 0.1147],
+    23: [0.24, 0.6399, 0, 0.1201],
+    24: [0.22, 0.6552, 0, 0.1248],
+    25: [0.20, 0.6696, 0, 0.1304],
+    26: [0.18, 0.6847, 0, 0.1353],
+    27: [0.16, 0.6997, 0, 0.1403],
+    28: [0.14, 0.7147, 0, 0.1453],
+    29: [0.1, 0.7497, 0, 0.1503]
+}
+
 // Map from server input value to the associated starforcing rates.
 const SERVER_RATES = {
     "gms": kmsRates,
@@ -245,6 +279,7 @@ const SERVER_RATES = {
     "tms": TMSRates,
     "tmsr": TMSRates,
     "kms": kmsRates
+    "star": starRates
 }
 
 function getRates(server, itemType, useAEE) {
@@ -255,7 +290,7 @@ function getRates(server, itemType, useAEE) {
 }
 
 function getSafeguardMultiplierIncrease(current_star, sauna, server) {
-    if ( (server == 'kms' || server == 'gms') && current_star >= 15 && current_star <= 17) {
+    if ( (server == 'kms' || server == 'gms' || server == 'star') && current_star >= 15 && current_star <= 17) {
         return 2;
     }
     
@@ -263,7 +298,7 @@ function getSafeguardMultiplierIncrease(current_star, sauna, server) {
         return 1;
     }
     
-    if (server != 'kms' && server!= 'gms' && current_star >= 15 && current_star <= 16) {
+    if (server != 'kms' && server!= 'gms' && server != 'star' && current_star >= 15 && current_star <= 16) {
         return 1;
     }
 
