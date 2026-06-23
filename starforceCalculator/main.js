@@ -82,7 +82,7 @@ function median(values) {
         return (values[half - 1] + values[half]) / 2.0;
 }
 
-function attemptCost(current_star, item_level, boom_protect, thirty_off, sauna, silver, gold, diamond, five_ten_fifteen, chance_time, item_type, server) {
+function attemptCost(current_star, item_level, boom_protect, thirty_off, twenty_off, sauna, silver, gold, diamond, five_ten_fifteen, chance_time, item_type, server) {
     // if (item_type == "tyrant"){
     //     var attempt_cost = item_level**3.56;
     //     return parseFloat(attempt_cost.toFixed(0))
@@ -101,8 +101,11 @@ function attemptCost(current_star, item_level, boom_protect, thirty_off, sauna, 
     if (thirty_off) {
         multiplier = multiplier - 0.3;
     }
+    if (twenty_off) {
+        multiplier = multiplier - 0.2;
+    }
 
-    if (server == "kms" || server == "gms") {
+    if (server == "kms" || server == "gms" || server == "star") {
         //here
 
         if (boom_protect && !(five_ten_fifteen && current_star == 15)) {
@@ -319,7 +322,7 @@ function determineOutcome(current_star, rates, star_catch, boom_protect, five_te
         //success + maintain + boom = 1
         //sucess + maintain + boom * (0.7 +0.3) = 1
     }
-    if (boom_protect && current_star <= 16 && server != 'kms' && server != 'gms') { //boom protection enabled non-KMS
+    if (boom_protect && current_star <= 16 && server != 'kms' && server != 'gms' && server != 'star') { //boom protection enabled non-KMS
         if (probability_decrease > 0) {
             probability_decrease = probability_decrease + probability_boom;
         } else {
@@ -327,7 +330,7 @@ function determineOutcome(current_star, rates, star_catch, boom_protect, five_te
         }
         probability_boom = 0;
     }
-    if (boom_protect && current_star <= 17 && (server == 'kms' || server == 'gms') ) { //boom protection enabled KMS
+    if (boom_protect && current_star <= 17 && (server == 'kms' || server == 'gms' || server == 'star') ) { //boom protection enabled KMS
         probability_maintain = probability_maintain + probability_boom;
         probability_boom = 0;
     }
@@ -385,7 +388,7 @@ function getBoomStar(current_stars, server) {
     return 20;
 }
 
-function performExperiment(current_stars, desired_star, rates, item_level, boom_protect, thirty_off, star_catch, five_ten_fifteen, sauna, silver, gold, diamond, item_type, two_plus, useAEE, server, boom_event) {
+function performExperiment(current_stars, desired_star, rates, item_level, boom_protect, thirty_off, twenty_off, star_catch, five_ten_fifteen, sauna, silver, gold, diamond, item_type, two_plus, useAEE, server, boom_event) {
     /** returns [total_mesos, total_booms]  or [AEE_amount, total_booms]*/
     var current_star = current_stars;
     var total_mesos = 0;
@@ -399,8 +402,8 @@ function performExperiment(current_stars, desired_star, rates, item_level, boom_
         }
         else {
             var chanceTime = false
-            if (server != 'kms' && server != 'gms') var chanceTime = checkChanceTime(decrease_count);
-            total_mesos = total_mesos + attemptCost(current_star, item_level, boom_protect, thirty_off, sauna, silver, gold, diamond, five_ten_fifteen, chanceTime, item_type, server);
+            if (server != 'kms' && server != 'gms' && server != 'star') var chanceTime = checkChanceTime(decrease_count);
+            total_mesos = total_mesos + attemptCost(current_star, item_level, boom_protect, thirty_off, twenty_off, sauna, silver, gold, diamond, five_ten_fifteen, chanceTime, item_type, server);
         }
 
         if (chanceTime) {
@@ -444,7 +447,7 @@ function performExperiment(current_stars, desired_star, rates, item_level, boom_
     return [total_mesos, total_booms]
 }
 
-function repeatExperiment(total_trials, current_star, desired_star, rates, item_level, boom_protect, thirty_off, star_catch, five_ten_fifteen, sauna, silver, gold, diamond, item_type, two_plus, useAEE, server, boom_event) {
+function repeatExperiment(total_trials, current_star, desired_star, rates, item_level, boom_protect, thirty_off, twenty_off, star_catch, five_ten_fifteen, sauna, silver, gold, diamond, item_type, two_plus, useAEE, server, boom_event) {
     //* return [average_cost, average_booms, meso_result_list, boom_result_list] */
     var total_mesos = 0;
     var total_booms = 0;
@@ -454,11 +457,11 @@ function repeatExperiment(total_trials, current_star, desired_star, rates, item_
     var meso_result_list_divided = [];
 
     while (current_trial < total_trials) {
-        var trial_mesos = performExperiment(current_star, desired_star, rates, item_level, boom_protect, thirty_off, star_catch, five_ten_fifteen, sauna, silver, gold, diamond, item_type, two_plus, useAEE, server, boom_event)[0];
+        var trial_mesos = performExperiment(current_star, desired_star, rates, item_level, boom_protect, thirty_off, twenty_off, star_catch, five_ten_fifteen, sauna, silver, gold, diamond, item_type, two_plus, useAEE, server, boom_event)[0];
         meso_result_list.push(trial_mesos);
         meso_result_list_divided.push(trial_mesos / 1000000000);
 
-        var trial_booms = performExperiment(current_star, desired_star, rates, item_level, boom_protect, thirty_off, star_catch, five_ten_fifteen, sauna, silver, gold, diamond, item_type, two_plus, useAEE, server, boom_event)[1];
+        var trial_booms = performExperiment(current_star, desired_star, rates, item_level, boom_protect, thirty_off, twenty_off, star_catch, five_ten_fifteen, sauna, silver, gold, diamond, item_type, two_plus, useAEE, server, boom_event)[1];
         boom_result_list.push(trial_booms);
 
         total_mesos = total_mesos + trial_mesos;
@@ -495,7 +498,7 @@ function do_stuff() {
     let desired_star = parseInt(document.getElementById('target_stars').value);
     let region = document.getElementById('server').value
 
-    const has30Stars = region === 'gms' || region === 'kms';
+    const has30Stars = region === 'gms' || region === 'kms' || region === 'star';
 
     if (has30Stars) {
         if (desired_star > 30 || desired_star < 0 || current_star < 0) {
@@ -527,6 +530,7 @@ function do_stuff() {
     var mvp = document.getElementById('mvp').value;
     var total_trials = document.getElementById('trials').value;
     var thirty_off = document.getElementById('30').checked;
+    var twenty_off = document.getElementById('20').checked;
     var five_ten_fifteen = document.getElementById('5_10_15').checked;
     var sauna = false;
     var two_plus = document.getElementById('plus2').checked;
@@ -705,7 +709,7 @@ document.addEventListener("DOMContentLoaded", function () {
     $('#server').on('change', function () {
         const selectedValue = $(this).val(); // Get the selected value directly
 
-        if (selectedValue === "kms" || selectedValue === "gms") {
+        if (selectedValue === "kms" || selectedValue === "gms" || selectedValue === "star") {
             document.getElementById("boom_event").disabled = false;
             document.getElementById("boom_event").checked = false;
 
@@ -775,6 +779,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             document.getElementById("5_10_15").disabled = false;
             document.getElementById("30").disabled = false;
+            document.getElementById("20").disabled = false;
             //document.getElementById("sauna").disabled = false;
             // document.getElementById("boom_event-text").innerText = "30% Boom Reduction";
             document.getElementById("plus2").disabled = false;
