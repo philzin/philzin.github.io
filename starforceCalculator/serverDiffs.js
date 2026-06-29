@@ -107,7 +107,7 @@ const SERVER_COST_FUNCTIONS = {
     "tms": tmsRegCost,
     "tmsr": tmsRebootCost,
     'kms': kmsCost,
-    "star": kmsCost
+    "star": saviorCost
 }
 
 function getBaseCost(server, current_star, item_level) {
