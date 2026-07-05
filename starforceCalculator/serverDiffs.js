@@ -290,7 +290,7 @@ function getRates(server, itemType, useAEE) {
 }
 
 function getSafeguardMultiplierIncrease(current_star, sauna, server) {
-    if ( (server == 'kms' || server == 'gms' || server == 'star') && current_star >= 15 && current_star <= 17) {
+    if ( (server == 'kms' || server == 'gms') && current_star >= 15 && current_star <= 17) {
         return 2;
     }
     
