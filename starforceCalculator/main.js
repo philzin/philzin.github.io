@@ -106,20 +106,18 @@ function attemptCost(current_star, item_level, boom_protect, thirty_off, twenty_
     }
 
     if (server == "kms" || server == "gms") {
-        //here
-
         if (boom_protect && !(five_ten_fifteen && current_star == 15)) {
             multiplier = multiplier + getSafeguardMultiplierIncrease(current_star, sauna, server);
         }
+    }
 
     else if (server == "star") {
         if (boom_protect && !(five_ten_fifteen && current_star == 15)) {
             multiplier = multiplier * 2;
         }
-
     }
-    else {
 
+    else {
         if (boom_protect && !(five_ten_fifteen && current_star == 15) && !(chance_time)) {
             multiplier = multiplier + getSafeguardMultiplierIncrease(current_star, sauna, server);
         }
